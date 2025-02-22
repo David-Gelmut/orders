@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Create order')
+@section('title','Создать заказ')
 @section('content')
     <form action="{{route('orders.store')}}" method="post" class="max-w-sm mx-auto">
         @csrf
@@ -35,9 +35,7 @@
             @error('product_ids')<div class="text-red-900">{{ $message }}</div>@enderror
         </div>
         <div class="mb-5">
-            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Количество каждого выбранного товара</label>
-            <input value="{{old('product_count')}}" name="product_count" type="text" id="number-input" aria-describedby="helper-text-explanation" class="@error('comment') border-red-500 @enderror bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1000"/>
-            @error('product_count')<div class="text-red-900">{{ $message }}</div>@enderror
+            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Количество каждого выбранного товара можно поменять после создания заказа(по умолчиню 1)</label>
         </div>
         <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

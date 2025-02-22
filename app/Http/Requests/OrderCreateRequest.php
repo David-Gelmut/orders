@@ -25,7 +25,7 @@ class OrderCreateRequest extends FormRequest
             'name'=>['required','string'],
             'comment'=>[],
             'product_ids'=>['required','array'],
-            'product_count'=>['required'],
+          //  'product_count'=>['required'],
             'created_date'=>['required','date_format:Y-m-d']
         ];
     }
@@ -35,7 +35,7 @@ class OrderCreateRequest extends FormRequest
         return [
             'name.required' => 'Поле Имя обязательно для заполнения',
             'product_ids.required'  => 'Поле Товары статьи обязательно для заполнения',
-            'product_count.required' => 'Поле Количество товаров обязательно для заполнения',
+          //  'product_count.required' => 'Поле Количество товаров обязательно для заполнения',
             'created_date.date_format' => 'Поле Даты создания имеет неверный формат.Формат: Y-m-d',
             'created_date.required' => 'Поле Даты создания обязательно для заполнения'
         ];

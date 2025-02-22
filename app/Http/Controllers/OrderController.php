@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeCountProductRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\OrderCreateRequest;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -24,23 +26,21 @@ class OrderController extends Controller
     public function store(OrderCreateRequest $request): RedirectResponse
     {
         $data = $request->validated();
-
-        if (isset($data['product_ids']) && isset($data['product_count'])) {
+        if (isset($data['product_ids'])) {
 
             $data['created_date'] = now();
             $productIds = $data['product_ids'];
-            $productCount = $data['product_count'];
-            unset($data['product_ids'], $data['product_count']);
+            unset($data['product_ids']);
 
             $order = Order::query()->create($data);
             foreach ($productIds as $id) {
                 $order->orderItems()->create([
                     'product_id' => $id,
-                    'product_count' => $productCount
                 ]);
             }
+            return redirect()->route('orders.show', compact('order'))->with('success','Заказ создан!');
         }
-        return redirect()->route('orders.index');
+        return redirect()->route('orders.index')->with('error','Ошибка создания заказа!');
     }
 
     public function show(Order $order): View
@@ -50,18 +50,21 @@ class OrderController extends Controller
     }
 
 
-
     public function destroy(Order $order): RedirectResponse
     {
-        $order->delete();
-        return redirect()->route('orders.index');
+        if($order->delete()){
+            return redirect()->route('orders.index')->with('success','Заказ удалён!');
+        }
+        return redirect()->route('orders.index')->with('error','Ошибка удаления заказа!');
     }
 
     public function changeStatus(ChangeStatusRequest $request, Order $order): RedirectResponse
     {
         $data = $request->validated();
         $order->status = $data['status'];
-        $order->save();
-        return redirect()->route('orders.index');
+        if($order->save()){
+            return redirect()->route('orders.show',compact('order'))->with('success','Статус заказа изменен!');
+        }
+        return redirect()->route('orders.show',compact('order'))->with('error','Не удалось изменить статус заказа!');
     }
 }

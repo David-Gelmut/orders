@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/','products');
 
 Route::resource('products',\App\Http\Controllers\ProductController::class);
+Route::post('products/change_count/{product}/{order}',[\App\Http\Controllers\ProductController::class,'changeCountProduct'])->name('products.change_count');
 
 Route::get('orders',[\App\Http\Controllers\OrderController::class,'index'])->name('orders.index');
 Route::get('create/create',[\App\Http\Controllers\OrderController::class,'create'])->name('orders.create');

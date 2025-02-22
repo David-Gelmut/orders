@@ -37,4 +37,11 @@ class Order extends Model
             ->get()
             ->pluck('product');
     }
+
+    public function getProductCount(int $productId): int
+    {
+        return ($this->orderItems()
+            ->where('product_id', $productId)
+            ->value('product_count'));
+    }
 }

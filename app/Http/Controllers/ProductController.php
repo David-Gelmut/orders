@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeCountProductRequest;
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -59,8 +62,10 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, Product $product): RedirectResponse
     {
         $data = $request->validated();
-        $product->update($data);
-        return redirect()->route('products.index');
+        if($product->update($data)){
+            return redirect()->route('products.show',compact('product'))->with('success','Товар обновлен!');
+        }
+        return redirect()->route('products.show',compact('product'))->with('error','Не удалось обновить товар!');
     }
 
     /**
@@ -68,7 +73,26 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
-        $product->delete();
-        return redirect()->route('products.index');
+        if($product->delete()){
+            return redirect()->route('products.index')->with('success','Товар удалён!');
+        }
+        return redirect()->route('products.index')->with('error','Ошибка удаления товара!');
+    }
+
+    public function changeCountProduct(ChangeCountProductRequest $request, Product $product, Order $order): RedirectResponse
+    {
+        $data = $request->validated();
+
+        $orderItem = $order->orderItems()
+            ->where('order_id', $order->id)
+            ->where('product_id', $product->id)
+            ->first();
+        if ($orderItem) {
+            $orderItem->product_count = $data['product_count'];
+            $orderItem->save();
+            return redirect()->route('orders.show', ['order' => $order])->with('success','Количество товара в заказе изменено!');
+        }
+
+        return redirect()->route('orders.show', ['order' => $order])->with('error','Не удалось изменить количество товара!');
     }
 }

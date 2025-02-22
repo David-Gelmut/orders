@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Update product '.$product->title)
+@section('title','Обновить продукт '.$product->title)
 @section('content')
     <form action="{{route('products.update',compact('product'))}}" method="post" class="max-w-sm mx-auto">
         @csrf

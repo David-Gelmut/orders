@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Show product '.$product->title)
+@section('title','Продукт '.$product->title)
 @section('content')
     <div class="max-w-sm mx-auto">
         <div class="mb-5">
