@@ -74,9 +74,9 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         if($product->delete()){
-            return redirect()->route('products.index')->with('success','Товар удалён!');
+            return back()->with('success','Товар удалён!');
         }
-        return redirect()->route('products.index')->with('error','Ошибка удаления товара!');
+        return  back()->with('error','Ошибка удаления товара!');
     }
 
     public function changeCountProduct(ChangeCountProductRequest $request, Product $product, Order $order): RedirectResponse
