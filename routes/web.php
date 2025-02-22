@@ -24,3 +24,5 @@ Route::post('orders',[\App\Http\Controllers\OrderController::class,'store'])->na
 Route::get('orders/{order}',[\App\Http\Controllers\OrderController::class,'show'])->name('orders.show');
 Route::delete('orders/{order}',[\App\Http\Controllers\OrderController::class,'destroy'])->name('orders.destroy');
 Route::post('orders/change_status/{order}',[\App\Http\Controllers\OrderController::class,'changeStatus'])->name('order.change_status');
+Route::post('orders/bind_product/{order}',[\App\Http\Controllers\OrderController::class,'bindProduct'])->name('order.bind_product');
+Route::post('orders/delete_bind_product/{order}',[\App\Http\Controllers\OrderController::class,'deleteBindProduct'])->name('order.delete_bind_product');

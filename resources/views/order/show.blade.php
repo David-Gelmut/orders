@@ -51,6 +51,30 @@
                 </button>
             </form>
         </div>
+        @php
+            $productsAll = \App\Models\Product::all();
+        @endphp
+        @if(count($productsAll) > 0)
+
+            <div class="mx-auto max-w-xl relative overflow-x-auto shadow-md sm:rounded-lg px-auto p-6 mt-10 ml-20">
+                <form action="{{route('order.bind_product',compact('order'))}}" method="post">
+                    @csrf
+                    <div class="mb-5">
+                        <label for="product_ids" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Товар</label>
+                        <select multiple name="product_ids[]"  id="product_ids" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 @error('product_ids') border-red-500 @enderror">
+                            @foreach($productsAll as $product)
+                                <option value="{{$product->id}}">{{$product->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('product_ids')<div class="text-red-900">{{ $message }}</div>@enderror
+                    </div>
+                    <button type="submit"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Привязать товары
+                    </button>
+                </form>
+            </div>
+        @endif
         <div class="flex flex-col gap-4">
             <div class="mx-auto max-w-xl mb-10 mt-10">
                 <div   class="font-bold text-3xl" >Связанные товары</div>
@@ -77,8 +101,6 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Сумма в заказе
-                            </th>
-                            <th scope="col" class="px-6 py-3">
                             </th>
                             <th scope="col" class="px-6 py-3">
                             </th>
@@ -120,17 +142,13 @@
                                 <td class="px-6 py-4">
                                     {{$order->getProductCount($product->id)*$product->price}}
                                 </td>
-                                <td class="px-6 py-4">
-                                    <a href="{{route('products.edit',compact('product'))}}"
-                                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Редактировать</a>
-                                </td>
-                                <form action="{{route('products.destroy',compact('product'))}}" method="post">
-                                    @method("DELETE")
+                                <form action="{{route('order.delete_bind_product',compact('order'))}}" method="post">
                                     @csrf
+                                    <input type="hidden" name="product_id" value="{{$product->id}}"/>
                                     <td class="px-6 py-4">
                                         <button type="submit"
                                                 class="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer">
-                                            Удалить
+                                            Отвязать
                                         </button>
                                     </td>
                                 </form>
