@@ -56,7 +56,7 @@
                         @endforeach
                     </td>
                     <td class="px-6 py-4">
-                        {{number_format($order->getTotalOrderPrice(), 2, '.', '') }}
+                       {{$order->getTotalOrderPrice()}}
                     </td>
                     <td class="px-6 py-4">
                         <a href="{{route('orders.show',compact('order'))}}"> Перейти к заказу</a>

@@ -24,10 +24,8 @@
                     Цена
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Редатировать
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Удалить
                 </th>
             </tr>
             </thead>

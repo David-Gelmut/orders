@@ -20,11 +20,15 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function getTotalOrderPrice(): int
+    public function getTotalOrderPrice(): float
     {
         $totalPrice = 0;
+
         foreach ($this->getProducts() as $product) {
-            $totalPrice += $product->price;
+            $priceProduct = $product->price;
+            $countProduct = $this->getProductCount($product->id);
+
+            $totalPrice+=$priceProduct*$countProduct;
         }
         return $totalPrice;
     }
