@@ -17,4 +17,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function orderItems(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
