@@ -22,26 +22,22 @@ class Order extends Model
 
     public function getTotalOrderPrice(): float
     {
-        return $this->orderItems()
-            ->with('product')
-            ->get()
-            ->map(function ($item) {
-                return $item->product->price * $item->product_count;
-            })->sum();
+       return $this->orderItems
+                    ->map(function ($item) {
+                        return $item->product->price * $item->product_count;
+                    })->sum();
     }
 
     public function getProducts(): Collection
     {
-        return $this->orderItems()
-            ->with('product')
-            ->get()
-            ->pluck('product');
+        return $this->orderItems
+                    ->pluck('product');
     }
 
     public function getProductCount(int $productId): int
     {
         return $this->orderItems()
-            ->where('product_id', $productId)
-            ->value('product_count');
+                    ->where('product_id', $productId)
+                    ->value('product_count');
     }
 }

@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BindProductRequest;
-use App\Http\Requests\ChangeCountProductRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\DeleteBindProductRequest;
 use App\Http\Requests\OrderCreateRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -33,16 +31,15 @@ class OrderController extends Controller
         if (isset($data['product_ids'])) {
 
             $data['created_date'] = now();
-
             $productIds = $data['product_ids'];
             unset($data['product_ids']);
-
             $order = Order::query()->create($data);
+
             $orderItems = collect($productIds)->map(function ($item) {
                 return new OrderItem(['product_id' => $item]);
             });
-
             $order->orderItems()->saveMany($orderItems);
+
             return redirect()->route('orders.show', compact('order'))->with('success', 'Заказ создан!');
         }
 
@@ -83,6 +80,7 @@ class OrderController extends Controller
             $currentOrderProductsIds = $order->getProducts()->pluck('id')->toArray();
             $productIds = array_diff($productIds, $currentOrderProductsIds);
             if (count($productIds) > 0) {
+
                 $orderItems = collect($productIds)->map(function ($item) {
                     return new OrderItem(['product_id' => $item]);
                 });
